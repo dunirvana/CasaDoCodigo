@@ -55,6 +55,7 @@ namespace CasaDoCodigo.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult Resumo(Cadastro cadastro)
         {
             if (ModelState.IsValid)
@@ -66,6 +67,7 @@ namespace CasaDoCodigo.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public UpdateQuantidadeResponse UpdateQuantidade([FromBody]ItemPedido itemPedido)
         {
             return pedidoRepository.UpdateQuantidade(itemPedido);
