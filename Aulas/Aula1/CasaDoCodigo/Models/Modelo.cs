@@ -21,11 +21,11 @@ namespace CasaDoCodigo.Models
 
         }
 
-        [Required]
+        [Required(ErrorMessage = "Campo obrigatório")]
         public string Codigo { get; private set; }
-        [Required]
+        [Required(ErrorMessage = "Campo obrigatório")]
         public string Nome { get; private set; }
-        [Required]
+        [Required(ErrorMessage = "Campo obrigatório")]
         public decimal Preco { get; private set; }
 
         public Produto(string codigo, string nome, decimal preco)
@@ -43,39 +43,41 @@ namespace CasaDoCodigo.Models
         }
 
         public virtual Pedido Pedido { get; set; }
-        [Required]
+        [Required(ErrorMessage = "Campo obrigatório")]
+        [MinLength(5, ErrorMessage = "O tamanho mínimo para o nome é de 5 caracteres")]
+        [MaxLength(50, ErrorMessage = "O tamanho máximo para o nome é de 50 caracteres")]
         public string Nome { get; set; } = "";
-        [Required]
+        [Required(ErrorMessage = "Campo obrigatório")]
         public string Email { get; set; } = "";
-        [Required]
+        [Required(ErrorMessage = "Campo obrigatório")]
         public string Telefone { get; set; } = "";
-        [Required]
+        [Required(ErrorMessage = "Campo obrigatório")]
         public string Endereco { get; set; } = "";
-        [Required]
+        [Required(ErrorMessage = "Campo obrigatório")]
         public string Complemento { get; set; } = "";
-        [Required]
+        [Required(ErrorMessage = "Campo obrigatório")]
         public string Bairro { get; set; } = "";
-        [Required]
+        [Required(ErrorMessage = "Campo obrigatório")]
         public string Municipio { get; set; } = "";
-        [Required]
+        [Required(ErrorMessage = "Campo obrigatório")]
         public string UF { get; set; } = "";
-        [Required]
+        [Required(ErrorMessage = "Campo obrigatório")]
         public string CEP { get; set; } = "";
     }
 
     [DataContract]
     public class ItemPedido : BaseModel
     {   
-        [Required]
+        [Required(ErrorMessage = "Campo obrigatório")]
         [DataMember]
         public Pedido Pedido { get; private set; }
-        [Required]
+        [Required(ErrorMessage = "Campo obrigatório")]
         [DataMember]
         public Produto Produto { get; private set; }
-        [Required]
+        [Required(ErrorMessage = "Campo obrigatório")]
         [DataMember]
         public int Quantidade { get; private set; }
-        [Required]
+        [Required(ErrorMessage = "Campo obrigatório")]
         [DataMember]
         public decimal PrecoUnitario { get; private set; }
         [DataMember]
@@ -113,7 +115,7 @@ namespace CasaDoCodigo.Models
         }
 
         public List<ItemPedido> Itens { get; private set; } = new List<ItemPedido>();
-        [Required]
+        [Required(ErrorMessage = "Campo obrigatório")]
         public virtual Cadastro Cadastro { get; private set; }
     }
 }
