@@ -1,51 +1,39 @@
 ﻿using CasaDoCodigo.Models;
 using CasaDoCodigo.Repositories;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace CasaDoCodigo
 {
     public class DataService : IDataService
     {
-        private readonly ApplicationContext contexto;
-        private readonly IProdutoRepository produtoRepository;
-
-        public DataService(ApplicationContext contexto,
-            IProdutoRepository produtoRepository)
+        public async Task InicializaDBAsync(IServiceProvider provider)
         {
-            this.contexto = contexto;
-            this.produtoRepository = produtoRepository;
-        }
+            var contexto = provider.GetService<ApplicationContext>();
 
-        public void InicializaDB()
-        {
-            contexto.Database.Migrate();
+            await contexto.Database.MigrateAsync();
 
-            List<Livro> livros = GetLivros();
-            if (livros == null)
+            if (await contexto.Set<Produto>().AnyAsync())
+            {
                 return;
+            }
 
-            produtoRepository.SaveProdutos(livros);
+            List<Livro> livros = await GetLivrosAsync();
 
+            var produtoRepository = provider.GetService<IProdutoRepository>();
+            await produtoRepository.SaveProdutosAsync(livros);
         }
 
-        private static List<Livro> GetLivros()
+        private async Task<List<Livro>> GetLivrosAsync()
         {
-            var filePath = "livros.json";
-            if (!File.Exists(filePath))
-                return null;
-
-            var json = File.ReadAllText(filePath);
-            var livros = JsonConvert.DeserializeObject<List<Livro>>(json);
-            
-            return livros;
+            var json = await File.ReadAllTextAsync("livros.json");
+            return JsonConvert.DeserializeObject<List<Livro>>(json);
         }
     }
-
-
 }
