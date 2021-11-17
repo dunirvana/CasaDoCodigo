@@ -40,7 +40,7 @@ namespace CasaDoCodigo
             services.AddSession();
 
             string defaultConnectionString = Configuration.GetConnectionString("Default");
-            string identityConnectionString = Configuration.GetConnectionString("Identity");
+            
 
             services.AddDbContext<ApplicationContext>(options =>
                 options.UseSqlServer(defaultConnectionString)
@@ -53,14 +53,6 @@ namespace CasaDoCodigo
             services.AddTransient<IPedidoRepository, PedidoRepository>();
             services.AddTransient<ICadastroRepository, CadastroRepository>();
 
-            //
-            services.AddDbContext<ApplicationDbContext>(
-                options =>
-                    options.UseSqlServer(identityConnectionString)
-                );
-
-            services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
-                .AddEntityFrameworkStores<ApplicationDbContext>();
 
             services.AddControllersWithViews();
             services.AddRazorPages();
@@ -87,10 +79,11 @@ namespace CasaDoCodigo
 
             app.UseRouting();
 
+            app.UseStaticFiles();
+
             app.UseAuthentication();
             app.UseAuthorization();
 
-            app.UseStaticFiles();
             app.UseSession();
 
             app.UseEndpoints(endpoints =>

@@ -1,5 +1,4 @@
-﻿
-class Carrinho {
+﻿class Carrinho {
     clickIncremento(button) {
         let data = this.getData(button);
         data.Quantidade++;
@@ -29,7 +28,7 @@ class Carrinho {
     }
 
     postQuantidade(data) {
-        
+
         let token = $('[name=__RequestVerificationToken]').val();
 
         let headers = {};

@@ -1,7 +1,7 @@
 ﻿@page
 @model RegisterModel
 @{
-    ViewData["Title"] = "Register";
+    ViewData["Title"] = "Nova Conta";
 }
 
 <h1>@ViewData["Title"]</h1>
@@ -9,9 +9,8 @@
 <div class="row">
     <div class="col-md-4">
         <form asp-route-returnUrl="@Model.ReturnUrl" method="post">
-            <h4>Create a new account.</h4>
-            <hr />
-            <div asp-validation-summary="All" class="text-danger"></div>
+            <h4>Criar uma nova conta.</h4>
+            <hr />            
             <div class="form-group">
                 <label asp-for="Input.Email"></label>
                 <input asp-for="Input.Email" class="form-control" />
@@ -27,20 +26,32 @@
                 <input asp-for="Input.ConfirmPassword" class="form-control" />
                 <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
             </div>
-            <button type="submit" class="btn btn-primary">Register</button>
+            <button type="submit" class="btn btn-primary">Cadastrar</button>
         </form>
     </div>
     <div class="col-md-6 col-md-offset-2">
+        @{
+            if (!ModelState.IsValid)
+            {
+                <section>
+                    <h4><strong class="text-danger">Atenção: </strong>Ocorreram os seguintes erros ao tentar criar um novo usuário:</h4>
+                    <hr />
+                    <div asp-validation-summary="All" class="text-danger"></div>
+                </section>
+                <br />
+            }
+        }
+
         <section>
-            <h4>Use another service to register.</h4>
+            <h4>Utilize outro serviço para se registrar.</h4>
             <hr />
             @{
                 if ((Model.ExternalLogins?.Count ?? 0) == 0)
                 {
                     <div>
                         <p>
-                            There are no external authentication services configured. See <a href="https://go.microsoft.com/fwlink/?LinkID=532715">this article</a>
-                            for details on setting up this ASP.NET application to support logging in via external services.
+                            Ainda não existe um serviço externo para a autenticação configurado. Veja  <a href="https://go.microsoft.com/fwlink/?LinkID=532715">esse artigo</a>
+                            para mais detalhes de como configurar a aplicação para suportar autenticação por meio de serviços externos.
                         </p>
                     </div>
                 }
@@ -51,7 +62,7 @@
                             <p>
                                 @foreach (var provider in Model.ExternalLogins)
                                 {
-                                    <button type="submit" class="btn btn-primary" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account">@provider.DisplayName</button>
+                                    <button type="submit" class="btn btn-primary" name="provider" value="@provider.Name" title="Autenticar usando sua conta @provider.DisplayName ">@provider.DisplayName</button>
                                 }
                             </p>
                         </div>
