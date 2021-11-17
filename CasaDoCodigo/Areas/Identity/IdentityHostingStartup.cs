@@ -24,9 +24,15 @@ namespace CasaDoCodigo.Areas.Identity
                         options.UseSqlServer(identityConnectionString)
                     );
 
-                services.AddDefaultIdentity<IdentityUser>(options => 
-                    options.SignIn.RequireConfirmedAccount = true
-                    )
+                services.AddDefaultIdentity<IdentityUser>(options =>
+                    {
+                        options.SignIn.RequireConfirmedAccount = true;
+
+                        // flexibilização de senhas
+                        options.Password.RequireNonAlphanumeric =
+                        options.Password.RequireLowercase =
+                        options.Password.RequireUppercase = false;
+                    })
                     .AddErrorDescriber<IdentityErrorDescriberPtBr>()
                     .AddEntityFrameworkStores<ApplicationDbContext>();
 
