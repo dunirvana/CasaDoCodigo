@@ -1,6 +1,7 @@
 using CasaDoCodigo.Data;
 using CasaDoCodigo.Repositories;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.CookiePolicy;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -56,6 +57,19 @@ namespace CasaDoCodigo
 
             services.AddControllersWithViews();
             services.AddRazorPages();
+
+            services.AddAuthentication()
+                .AddMicrosoftAccount(options =>
+                {
+                    options.ClientId = Configuration["ExternalLogin:Microsoft:ClientId"];
+                    options.ClientSecret = Configuration["ExternalLogin:Microsoft:ClientSecret"];
+                })
+                //.AddGoogle(options =>
+                //{
+                //    options.ClientId = Configuration["ExternalLogin:Google:ClientId"];
+                //    options.ClientSecret = Configuration["ExternalLogin:Google:ClientSecret"];
+                //})
+                ;
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -83,6 +97,13 @@ namespace CasaDoCodigo
 
             app.UseAuthentication();
             app.UseAuthorization();
+
+            app.UseCookiePolicy(new CookiePolicyOptions()
+            {
+                HttpOnly = HttpOnlyPolicy.Always,
+                Secure = CookieSecurePolicy.Always,
+                MinimumSameSitePolicy = SameSiteMode.None
+            });
 
             app.UseSession();
 
