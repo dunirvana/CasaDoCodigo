@@ -1,6 +1,6 @@
 ﻿@using Microsoft.AspNetCore.Identity
-@inject SignInManager<IdentityUser> SignInManager
-@inject UserManager<IdentityUser> UserManager
+@inject SignInManager<AppIdentityUser> SignInManager
+@inject UserManager<AppIdentityUser> UserManager
 
 @if (SignInManager.IsSignedIn(User))
 {
@@ -18,6 +18,6 @@ else
 {
     <ul class="nav navbar-nav navbar-right">
         <li><a asp-area="Identity" asp-page="/Account/Register">Nova Conta</a></li>
-        <li><a asp-area="Identity" asp-page="/Account/Login">Sair</a></li>
+        <li><a asp-area="Identity" asp-page="/Account/Login">Login</a></li>
     </ul>
 }

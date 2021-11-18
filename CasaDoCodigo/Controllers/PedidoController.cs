@@ -1,4 +1,5 @@
-﻿using CasaDoCodigo.Models;
+﻿using CasaDoCodigo.Data;
+using CasaDoCodigo.Models;
 using CasaDoCodigo.Models.ViewModels;
 using CasaDoCodigo.Repositories;
 using Microsoft.AspNetCore.Authorization;
@@ -15,12 +16,12 @@ namespace CasaDoCodigo.Controllers
     {
         private readonly IProdutoRepository produtoRepository;
         private readonly IPedidoRepository pedidoRepository;
-        private readonly UserManager<IdentityUser> userManager;
+        private readonly UserManager<AppIdentityUser> userManager;
 
         public PedidoController(
             IProdutoRepository produtoRepository,
             IPedidoRepository pedidoRepository,
-            UserManager<IdentityUser> userManager)
+            UserManager<AppIdentityUser> userManager)
         {
             this.produtoRepository = produtoRepository;
             this.pedidoRepository = pedidoRepository;

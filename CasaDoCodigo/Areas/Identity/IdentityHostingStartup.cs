@@ -24,7 +24,7 @@ namespace CasaDoCodigo.Areas.Identity
                         options.UseSqlServer(identityConnectionString)
                     );
 
-                services.AddDefaultIdentity<IdentityUser>(options =>
+                services.AddDefaultIdentity<AppIdentityUser>(options =>
                     {
                         options.SignIn.RequireConfirmedAccount = true;
 
