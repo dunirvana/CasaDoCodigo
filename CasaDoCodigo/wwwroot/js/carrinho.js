@@ -22,7 +22,7 @@
         var novaQuantidade = $(linhaDoItem).find('input').val();
 
         return {
-            Id: itemId,
+            Id: parseInt(itemId),
             Quantidade: novaQuantidade
         };
     }

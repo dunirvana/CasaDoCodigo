@@ -56,7 +56,7 @@ namespace CasaDoCodigo
             services.AddTransient<IRelatorioHelper, RelatorioHelper>();
 
             services.AddControllersWithViews();
-            services.AddRazorPages();
+            services.AddRazorPages().AddNewtonsoftJson();
 
             services.AddAuthentication()
                 .AddMicrosoftAccount(options =>
@@ -94,8 +94,6 @@ namespace CasaDoCodigo
             app.UseStaticFiles();
 
             app.UseRouting();
-
-            app.UseStaticFiles();
 
             app.UseAuthentication();
             app.UseAuthorization();
