@@ -3,6 +3,7 @@ using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using System;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
@@ -18,13 +19,17 @@ namespace CasaDoCodigo
     {
         private const string RelativeUri = "api/relatorio";
         private readonly IConfiguration configuration;
-        private readonly IHttpClientFactory clientFactory;
+
+        //PROBLEMA: NÃO DETECTA MUDANÇAS NO DNS
+        //private static HttpClient httpClient;
+
+        private readonly HttpClient httpClient;
 
         public RelatorioHelper(IConfiguration configuration,
-            IHttpClientFactory clientFactory)
+            HttpClient httpClient)
         {
             this.configuration = configuration;
-            this.clientFactory = clientFactory;
+            this.httpClient = httpClient;
         }
 
         public async Task GerarRelatorio(Pedido pedido)
@@ -37,27 +42,25 @@ namespace CasaDoCodigo
 
             //using (HttpClient httpClient = HttpClientFactory.Create())
             //{
-                //o texto do conteúdo (JSON)
-                var json = JsonConvert.SerializeObject(linhaRelatorio);
-                //o objeto HttpContent que empacota o texto (application/json)
-                HttpContent httpContent = new StringContent(json, Encoding.UTF8, "application/json");
-                //URI = identificador universal de recurso
+            //o texto do conteúdo (JSON)
+            var json = JsonConvert.SerializeObject(linhaRelatorio);
+            //o objeto HttpContent que empacota o texto (application/json)
+            HttpContent httpContent = new StringContent(json, Encoding.UTF8, "application/json");
+            //URI = identificador universal de recurso
 
-                //endereço base: http://localhost:5002
-                //endereço relativo: api/relatorio
+            //endereço base: http://localhost:5002
+            //endereço relativo: api/relatorio
 
-                Uri baseUri = new Uri(configuration["RelatorioWebAPIURL"]);
-                Uri uri = new Uri(baseUri, RelativeUri);
+            Uri baseUri = new Uri(configuration["RelatorioWebAPIURL"]);
+            Uri uri = new Uri(baseUri, RelativeUri);
 
-                var client = clientFactory.CreateClient();
+            HttpResponseMessage httpResponseMessage =
+                await httpClient.PostAsync(uri, httpContent);
 
-                HttpResponseMessage httpResponseMessage =
-                    await client.PostAsync(uri, httpContent);
-
-                if (!httpResponseMessage.IsSuccessStatusCode)
-                {
-                    throw new ApplicationException(httpResponseMessage.ReasonPhrase);
-                }
+            if (!httpResponseMessage.IsSuccessStatusCode)
+            {
+                throw new ApplicationException(httpResponseMessage.ReasonPhrase);
+            }
             //}
         }
 

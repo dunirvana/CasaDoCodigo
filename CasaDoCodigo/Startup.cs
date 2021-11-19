@@ -53,7 +53,7 @@ namespace CasaDoCodigo
             services.AddTransient<IProdutoRepository, ProdutoRepository>();
             services.AddTransient<IPedidoRepository, PedidoRepository>();
             services.AddTransient<ICadastroRepository, CadastroRepository>();
-            services.AddTransient<IRelatorioHelper, RelatorioHelper>();
+            //services.AddTransient<IRelatorioHelper, RelatorioHelper>();
 
             services.AddControllersWithViews();
             services.AddRazorPages().AddNewtonsoftJson();
@@ -71,7 +71,7 @@ namespace CasaDoCodigo
                 })
                 ;
 
-            services.AddHttpClient();
+            services.AddHttpClient<IRelatorioHelper, RelatorioHelper>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
