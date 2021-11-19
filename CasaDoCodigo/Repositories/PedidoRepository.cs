@@ -31,18 +31,21 @@ namespace CasaDoCodigo.Repositories
         private readonly IHttpHelper httpHelper;
         private readonly ICadastroRepository cadastroRepository;
         private readonly UserManager<AppIdentityUser> userManager;
+        private readonly IRelatorioHelper relatorioHelper;
 
         public PedidoRepository(IConfiguration configuration,
             ApplicationContext contexto,
             IHttpContextAccessor contextAccessor,
             IHttpHelper sessionHelper,
             ICadastroRepository cadastroRepository,
-            UserManager<AppIdentityUser> userManager) : base(configuration, contexto)
+            UserManager<AppIdentityUser> userManager,
+            IRelatorioHelper relatorioHelper) : base(configuration, contexto)
         {
             this.contextAccessor = contextAccessor;
             this.httpHelper = sessionHelper;
             this.cadastroRepository = cadastroRepository;
             this.userManager = userManager;
+            this.relatorioHelper = relatorioHelper;
         }
 
         public async Task AddItemAsync(string codigo)
@@ -130,6 +133,7 @@ namespace CasaDoCodigo.Repositories
             var pedido = await GetPedidoAsync();
             await cadastroRepository.UpdateAsync(pedido.Cadastro.Id, cadastro);
             httpHelper.ResetPedidoId();
+            await relatorioHelper.GerarRelatorio(pedido);
             return pedido;
         }
 
